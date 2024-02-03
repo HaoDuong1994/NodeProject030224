@@ -1,0 +1,19 @@
+{
+  "name": "nodeproject030223",
+  "version": "1.0.0",
+  "description": "project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HaoDuong1994/NodeProject030224.git"
+  },
+  "author": "Raymond",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HaoDuong1994/NodeProject030224/issues"
+  },
+  "homepage": "https://github.com/HaoDuong1994/NodeProject030224#readme"
+}
