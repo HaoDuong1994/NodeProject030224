@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create user</title>
+  </head>
+  <body>
+    <div>create new user</div>
+    <div class="form">
+      <form action="/customer/create-customer" method="POST">
+        <fieldset>
+          <div class="inputgroup">
+            <label>name: </label>
+            <input id="name" type="text" name="name" />
+          </div>
+
+          <div class="inputgroup">
+            <label>email: </label>
+            <input id="email" type="text" name="email" />
+          </div>
+
+          <div class="inputgroup">
+            <label>address: </label>
+            <input id="address" type="text" name="address" />
+          </div>
+
+          <div class="inputgroup">
+            <label>phone: </label>
+            <input id="phone" name="phone" type="text" />
+          </div>
+          <div class="inputgroup">
+            <label>img: </label>
+            <input id="img" name="img" type="text" />
+          </div>
+          <div class="inputgroup">
+            <label>password: </label>
+            <input id="password" name="password" type="password" />
+          </div>
+          <button>submit</button>
+        </fieldset>
+      </form>
+    </div>
+  </body>
+</html>

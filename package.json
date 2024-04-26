@@ -22,12 +22,22 @@
     "@babel/core": "^7.23.9",
     "@babel/node": "^7.23.9",
     "@babel/preset-env": "^7.23.9",
+    "alert": "^6.0.1",
+    "api-query-params": "^5.4.0",
+    "bcryptjs": "^2.4.3",
+    "bootstrap": "^5.3.3",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "express-fileupload": "^1.4.3",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.3.0",
+    "mongoose": "^8.1.1",
+    "mongoose-delete": "^1.0.2",
     "nodemon": "^3.0.3",
     "path": "^0.12.7",
+    "validator": "^13.11.0",
     "view-engine": "^1.1.1"
   }
 }
