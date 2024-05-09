@@ -4,12 +4,18 @@ const checkEmailExist = async (email) => {
   try {
     const user = await Admin.findOne({ email });
     console.log("user>>>>>>>>>>>>>>", user);
-    if (user)
+    if (user) {
       return {
         idUser: user._id,
         message: true,
         hashPassword: user.password,
       };
+    } else {
+      //
+      return {
+        message: false,
+      };
+    }
     return {
       message: false,
     };

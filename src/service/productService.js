@@ -11,8 +11,17 @@ const getAllProductService = async (reqQuery) => {
   const { page } = filter;
   const offset = (page - 1) * limit;
   delete filter.page;
-  const data = await Product.find(filter).skip(offset).limit(limit);
-  return data;
+  if (reqQuery.name) {
+    const data = await Product.find({
+      name: { $regex: ".*" + reqQuery.name + ".*" },
+    })
+      .skip(offset)
+      .limit(limit);
+    return data;
+  } else {
+    const data = await Product.find(filter).skip(offset).limit(limit);
+    return data;
+  }
 };
 const updateProductService = async (reqBody) => {
   //
@@ -39,8 +48,18 @@ const deleteProductService = async (id) => {
 };
 
 const findProductService = async (id) => {
-  const result = await Product.findById(id);
-  return result;
+  if (Array.isArray(id)) {
+    //
+    const listProduct = [];
+    for (let i = 0; i < id.length; i++) {
+      const singleProduct = await Product.findById(id[i]);
+      listProduct.push(singleProduct);
+    }
+    return listProduct;
+  } else {
+    const result = await Product.findById(id);
+    return result;
+  }
 };
 const findListProductByIdService = async (arrayIdProduct) => {
   try {

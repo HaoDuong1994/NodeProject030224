@@ -56,14 +56,14 @@
           <td><%= listProduct[i].price %></td>
           <td>
             <button>
-              <a href="/customerProductsPage/order/<%= listProduct[i]._id %>"
+              <a href="/customerProductsPage/order/<%= listProduct[i]._id %>/0"
                 >Order</a
               >
             </button>
           </td>
           <td>
             <form
-              action="/customer/delete-item/<%= listProduct[i]._id %>"
+              action="/customer/delete-item/<%= listProduct[i]._id %>/"
               method="POST">
               <button>X</button>
             </form>
@@ -72,9 +72,17 @@
         <% } %>
       </tbody>
     </table>
-    <div id="total-price">
-      <div>Total price</div>
-      <span class="total-price"><%= totalPrice %></span>
-    </div>
+    <form
+      action="/customerProductsPage/order/allProduct/<%= totalPrice %>"
+      method="GET">
+      <div id="total-price">
+        <div>Total price</div>
+        <span class="total-price"><%= totalPrice %></span>
+        <input name="totalPrice" type="hidden" value="<%= totalPrice %>" />
+      </div>
+      <div class="d-flex flex-nowrap mt-3">
+        <button class="btn btn-danger col-6 mx-auto">Order All</button>
+      </div>
+    </form>
   </body>
 </html>

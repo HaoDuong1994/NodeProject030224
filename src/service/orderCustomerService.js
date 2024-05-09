@@ -46,23 +46,45 @@ const createCustomerOrder = async (reqBody) => {
     console.log("error from create order service", error);
   }
 };
+
 const addProductToOrderService = async (idOrder, idProduct) => {
   const order = await Order.findById(idOrder);
-  console.log("order here", order);
-  order.products.push(idProduct);
-  await order.save();
-  return order;
+  if (Array.isArray(idProduct)) {
+    for (let i = 0; i < idProduct.length; i++) {
+      order.products.push(idProduct[i]);
+      await order.save();
+    }
+    return order;
+  } else {
+    order.products.push(idProduct);
+    return order;
+  }
 };
+
 const addOrderToCustomerService = async (req, idOrder) => {
   try {
-    console.log("req.coookie", req.cookies);
     const token = req.cookies.jwt;
     const user = await findUserByJwt(token);
-    console.log("user herre >>>>", user);
     user.orderInfor.push(idOrder);
     await user.save();
   } catch (error) {
     console.log("error in add order to customer service", error);
+  }
+};
+
+const findOrderById = async (id) => {
+  if (Array.isArray(id)) {
+    let arrayOrder = [];
+    for (let i = 0; i < id.length; i++) {
+      const data = await Order.findById(id[i])
+        .populate({ path: "products" })
+        .lean()
+        .exec();
+      arrayOrder.push(data);
+    }
+    return arrayOrder;
+  } else {
+    console.log("not arrray");
   }
 };
 module.exports = {
@@ -71,4 +93,5 @@ module.exports = {
   createCustomerOrder,
   addProductToOrderService,
   addOrderToCustomerService,
+  findOrderById,
 };

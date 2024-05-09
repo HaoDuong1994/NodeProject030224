@@ -17,73 +17,131 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="customerProductsPage/cart">Your card</a>
-            </li>
             <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Dropdown
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider" /></li>
+              <button
+                class="btn btn-dark dropdown-toggle"
+                data-bs-toggle="dropdown">
+                Product
+              </button>
+              <ul class="dropdown-menu dropdown-menu-dark">
                 <li>
-                  <a class="dropdown-item" href="#">Something else here</a>
+                  <a
+                    class="dropdown-item"
+                    href="/customerProductsPage?type=pants"
+                    >pants</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="/customerProductsPage?type=shirt"
+                    >shirt</a
+                  >
                 </li>
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+              <a class="nav-link" href="customerProductsPage/cart">Your card</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="customerProductsPage/order-history"
+                >Order history</a
+              >
+            </li>
+            <li class="nav-item d-flex justify-content-center">
+              <div class="">
+                <form action="customer/logout" method="POST">
+                  <button class="btn btn-outline-primary">Log out</button>
+                </form>
+              </div>
             </li>
           </ul>
-          <form class="d-flex" role="search">
+          <form
+            method="GET"
+            action="/customerProductsPage?=name"
+            class="d-flex nav-item mx-5"
+            role="search">
             <input
+              name="name"
+              type="text"
               class="form-control me-2"
-              type="search"
-              placeholder="Search"
+              placeholder="Search by product name"
               aria-label="Search" />
             <button class="btn btn-outline-success" type="submit">
               Search
             </button>
           </form>
+          <div class="nav-item">
+            <a
+              href="customerProductsPage/user-information"
+              class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+              ><%= user.name %></a
+            >
+            <img style="height: 50px; width: 50px" src="<%= user.img %>" />
+          </div>
         </div>
       </div>
     </nav>
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Imgage</th>
-        <th>Price</th>
-        <th>Description</th>
-        <th>Type</th>
-      </tr>
-      <% for (let i = 0; i < listProduct.length; i++) { %>
-      <tr>
-        <td><%= i + 1 %></td>
-        <td><%= listProduct[i].name %></td>
-        <td><%= listProduct[i].img %></td>
-        <td><%= listProduct[i].price %></td>
-        <td><%= listProduct[i].description %></td>
-        <td>
-          <form
-            method="POST"
-            action="/customer/add-cart/<%= listProduct[i]._id %>">
-            <button>Add cart</button>
-          </form>
-        </td>
-        <td><%= listProduct[i].type %></td>
-      </tr>
-      <% } %>
-    </table>
-    <form action="customer/logout" method="POST">
-      <button>Log out</button>
-    </form>
+    <div>
+      <div class="container overflow-hidden text-center">
+        <!-- Hàng thứ nhứt -->
+        <div class="row gy-5">
+          <div class="col-3">
+            <!-- Card thứ nhứt -->
+            <div class="card" style="width: 18rem">
+              <img
+                src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/ba000c9d-2a17-4fef-9f8c-73db601ce533/sportswear-t-shirt-GtmXnf.png"
+                class="card-img-top img-thumbnail"
+                style="width: 300px; height: 400px" />
+              <div class="card-body">
+                <h5 class="card-title">Áo thun trắng</h5>
+                <p class="card-text">Áo thun trắng vải cotton 4 chiều</p>
+                <div>
+                  <span>Type: </span>
+                  <span>Quần</span>
+                </div>
+                <div>
+                  <span>Price: </span>
+                  <span class="text-danger fs-5">30000</span>
+                </div>
+                <a href="#" class="btn btn-primary">Add to card</a>
+              </div>
+            </div>
+          </div>
+          <% for (let i = 0; i < listProduct.length; i++) { %>
+          <div class="col-3">
+            <!-- Card thứ nhứt -->
+            <div class="card" style="width: 18rem">
+              <img
+                src="<%= listProduct[i].img %>"
+                class="card-img-top img-thumbnail"
+                style="width: 300px; height: 400px" />
+              <div class="card-body">
+                <h5 class="card-title"><%= listProduct[i].name %></h5>
+                <p class="card-text"><%= listProduct[i]. description %></p>
+                <div>
+                  <span>Type: </span>
+                  <span><%= listProduct[i]. type %></span>
+                </div>
+                <div>
+                  <span>Price: </span>
+                  <span class="text-danger fs-5"
+                    ><%= listProduct[i].price %></span
+                  >
+                </div>
+                <div>
+                  <form
+                    method="POST"
+                    action="/customer/add-cart/<%= listProduct[i]._id %>">
+                    <button class="btn btn-primary">Add cart</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

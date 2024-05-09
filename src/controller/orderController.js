@@ -37,14 +37,12 @@ const getAllCartController = async (req, res) => {
 };
 const handleOrderController = async (req, res) => {
   try {
-    console.log("req.body in handleOrderControler", req.body);
     const dataOrderCreated = await createCustomerOrder(req.body);
     const idOrder = dataOrderCreated;
     const idProduct = req.body.productsID;
     const dataOrder = await addProductToOrderService(idOrder, idProduct);
-    console.log("data order >>>>>>>>>", dataOrder);
     await addOrderToCustomerService(req, dataOrder._id);
-    const data = await handleDeleteItemService(req, idProduct);
+    await handleDeleteItemService(req, idProduct);
     res.status(200).json({
       EC: 0,
       messsage: "Order success",
@@ -54,6 +52,7 @@ const handleOrderController = async (req, res) => {
     console.log("error from create order controller", error);
   }
 };
+
 module.exports = {
   createOrderController,
   getAllCartController,

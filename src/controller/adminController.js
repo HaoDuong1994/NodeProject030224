@@ -15,6 +15,7 @@ const {
 const hassPassword = require("../service/hashPasswordService");
 const checkEmailPasswordService = require("../service/checkEmailPassword");
 const createAdminController = async (req, res) => {
+  console.log("req.bodyyyyyyyyyyy", req.body);
   try {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).json({
@@ -22,9 +23,10 @@ const createAdminController = async (req, res) => {
         message: "You need upload Image profile",
       });
     } else {
-      // Check password exist from database
+      // Check email exist from database
       const isEmailExist = await checkEmailExist(req.body.email);
-      if (isEmailExist)
+      console.log("isEmail exist ", isEmailExist);
+      if (isEmailExist.message)
         return res.status(400).json({
           message: "Your email have been regristed already, please try again",
         });

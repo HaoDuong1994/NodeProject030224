@@ -1,8 +1,10 @@
 const Customer = require("../model/customerModel");
 const bcrypt = require("bcryptjs");
 const aqp = require("api-query-params");
+const { findOrderById } = require("../service/orderCustomerService");
 const { comparePassword } = require("../service/comparePasswordService");
 const { createToken, getIdByJwt } = require("../service/jwtservice");
+const { findProductService } = require("../service/productService");
 const createCustomerService = async (reqBody, res) => {
   try {
     let result = await Customer.create(reqBody);
@@ -39,7 +41,7 @@ const getAllCustomerService = async (reqQuery) => {
   }
 };
 const updateCustomerService = async (id, object) => {
-  const result = await Customer.updateOne({ _id: id }, object);
+  const result = await Customer.findByIdAndUpdate(id, object);
   return result;
 };
 const deleteCustomerService = async (id) => {
@@ -74,12 +76,12 @@ const loginCustomerService = async (email, password, res) => {
     console.log("error from login user service", error);
   }
 };
+
 const addCartService = async (reqBody) => {
   console.log("req.body >>>", reqBody);
   const id = reqBody.idCustomer;
   const myCustomer = await Customer.findById({ _id: id });
   if (myCustomer) {
-    //
     const addCart = await Customer.updateOne(
       { _id: id },
       { orderInfor: reqBody.idCart }
@@ -115,12 +117,35 @@ const handleDeleteItemService = async (req, idProduct) => {
     const idUser = getIdByJwt(token);
     const user = await Customer.findById(idUser);
     //Chỉ xóa một sản phẩm khi có giá trị giống nhau
-    user.cartInfor.splice(user.cartInfor.indexOf(idProduct), 1);
+    if (Array.isArray(idProduct)) {
+      for (let i = 0; i < idProduct.length; i++) {
+        user.cartInfor.splice(user.cartInfor.indexOf(idProduct[i]), 1);
+      }
+    } else {
+      user.cartInfor.splice(user.cartInfor.indexOf(idProduct), 1);
+    }
     await user.save();
     return user.orderInfor;
   } catch (error) {
     console.log("error from handleDeleteItem service", error);
   }
+};
+const handleOrderAllCartCustomerService = async (req) => {
+  //
+  const token = req.cookies.jwt;
+  const idUser = getIdByJwt(token);
+  const user = await Customer.findById(idUser);
+  const arrayIdProductIncart = user.cartInfor;
+  const listProduct = await findProductService(arrayIdProductIncart);
+  return listProduct;
+};
+const handleOrderHistoryService = async (req) => {
+  const token = req.cookies.jwt;
+  const idUser = getIdByJwt(token);
+  const user = await Customer.findById(idUser);
+  const orderInfor = user.orderInfor;
+  const data = await findOrderById(orderInfor);
+  return data;
 };
 module.exports = {
   createCustomerService,
@@ -132,4 +157,6 @@ module.exports = {
   addToCartService,
   handleCartCustomerService,
   handleDeleteItemService,
+  handleOrderAllCartCustomerService,
+  handleOrderHistoryService,
 };

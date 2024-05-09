@@ -1,3 +1,4 @@
+const { findUserByJwt } = require("../service/jwtservice");
 const {
   createCustomerService,
   getAllCustomerService,
@@ -8,18 +9,19 @@ const {
   addToCartService,
   handleCartCustomerService,
   handleDeleteItemService,
+  handleOrderAllCartCustomerService,
+  handleOrderHistoryService,
 } = require("../service/customerService");
 const {
   getAllProductService,
   findProductService,
   findListProductByIdService,
 } = require("../service/productService");
-const aqp = require("api-query-params");
+const moment = require("moment");
 const { singleUploadFile } = require("../service/uploadFileCustomerService");
 const hassPassword = require("../service/hashPasswordService");
 const createCustomerController = async (req, res) => {
   try {
-    console.log("req.bodyyyyyyyyyyyyyyyy", req.body);
     //check file exist
     // if (!req.files.img || Object.keys(req.files).length === 0) {
     //   return res.status(400).send("No files were uploaded.");
@@ -34,7 +36,6 @@ const createCustomerController = async (req, res) => {
     // req.body.img = imgUrl;
 
     req.body.password = hashPassword;
-    console.log("req.body>>>>>>>>", req.body);
     // Create customer
     let result = await createCustomerService(req.body, res);
     res.status(200).json({
@@ -62,9 +63,8 @@ const getAllCustomerController = async (req, res) => {
 //update
 const updateCustomerController = async (req, res) => {
   try {
-    //
     const id = req.body.id;
-    const object = delete req.body.id;
+    delete req.body.id;
     const result = await updateCustomerService(id, req.body);
     res.status(200).json({
       EC: 0,
@@ -90,7 +90,6 @@ const deleteCustomerController = async (req, res) => {
 //login
 const loginCustomerController = async (req, res) => {
   const { email, password } = req.body;
-  console.log("req.body>>>>>", req.body);
   try {
     console.log(email, password);
     const result = await loginCustomerService(email, password, res);
@@ -127,8 +126,17 @@ const addCartCustomerController = async (req, res) => {
 };
 //Page
 const getAllProductPageController = async (req, res) => {
-  const listProduct = await getAllProductService();
-  res.render("customerProductPage.ejs", { listProduct });
+  let data = [];
+  if (req.query) {
+    const listProduct = await getAllProductService(req.query);
+    data = listProduct;
+  } else {
+    const listProduct = await getAllProductService();
+    data = listProduct;
+  }
+  const token = req.cookies.jwt;
+  const user = await findUserByJwt(token);
+  res.render("customerProductPage.ejs", { listProduct: data, user });
 };
 const addCartController = async (req, res) => {
   const idProduct = req.params.idProduct;
@@ -167,15 +175,45 @@ const deleteItemController = async (req, res) => {
 };
 const handleCustomerOrder = async (req, res) => {
   try {
-    const idProduct = req.params.idProduct;
-    const product = await findProductService(idProduct);
-    console.log("product here", product);
-    res.render("customerOrderPage.ejs", { product: product });
+    const { idProduct, totalPrice } = req.params;
+    if (idProduct === "allProduct") {
+      console.log("ok >>>>>>");
+      const listProduct = await handleOrderAllCartCustomerService(req);
+      console.log("list product", listProduct);
+      res.render("customerOrderPage.ejs", {
+        product: listProduct,
+        totalPrice: totalPrice,
+      });
+    } else {
+      /////Single product
+      const product = await findProductService(idProduct);
+      const arrayProduct = [];
+      arrayProduct.push(product);
+      const totalPrice = product.price;
+      res.render("customerOrderPage.ejs", {
+        product: arrayProduct,
+        totalPrice: totalPrice,
+      });
+    }
   } catch (error) {
     res.status(400).json({
       EC: 1,
       message: JSON.stringify(error),
     });
+  }
+};
+const handlehistoryOrderController = async (req, res) => {
+  try {
+    const dataOrder = await handleOrderHistoryService(req);
+    for (let i = 0; i < dataOrder.length; i++) {
+      if (dataOrder[i] == null) {
+        dataOrder.splice(i, 1);
+        i--;
+      }
+    }
+    res.render("orderHistoryPage.ejs", { dataOrder, moment: moment });
+  } catch (error) {
+    res.status(400).json({ EC: 0, message: JSON.stringify(error) });
   }
 };
 module.exports = {
@@ -191,4 +229,5 @@ module.exports = {
   handleCartCustomerController,
   deleteItemController,
   handleCustomerOrder,
+  handlehistoryOrderController,
 };
