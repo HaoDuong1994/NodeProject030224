@@ -15,7 +15,6 @@ const {
 const hassPassword = require("../service/hashPasswordService");
 const checkEmailPasswordService = require("../service/checkEmailPassword");
 const createAdminController = async (req, res) => {
-  console.log("req.bodyyyyyyyyyyy", req.body);
   try {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).json({
@@ -25,7 +24,6 @@ const createAdminController = async (req, res) => {
     } else {
       // Check email exist from database
       const isEmailExist = await checkEmailExist(req.body.email);
-      console.log("isEmail exist ", isEmailExist);
       if (isEmailExist.message)
         return res.status(400).json({
           message: "Your email have been regristed already, please try again",
@@ -60,7 +58,6 @@ const createAdminController = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log("error from create adminController", error);
     res.status(400).json({
       Error: JSON.stringify(error),
     });
@@ -89,7 +86,6 @@ const updateAdminController = async (req, res) => {
       result: result,
     });
   } catch (error) {
-    console.log("error from update admin controller", error);
     res.json({
       error: JSON.stringify(error),
     });
@@ -173,8 +169,6 @@ const adminLoginController = async (req, res) => {
     let password = req.body.password;
     //Check email
     const userStatus = await checkEmailExist(email);
-    console.log("userStatus >>>>>>>>>>>", userStatus);
-    console.log("userEmail", userStatus.message);
     switch (userStatus.message) {
       case true:
         //move to check password

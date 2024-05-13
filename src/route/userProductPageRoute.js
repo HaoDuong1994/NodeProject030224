@@ -4,6 +4,7 @@ const {
   handleCartCustomerController,
   handleCustomerOrder,
   handlehistoryOrderController,
+  handleCustomerInformation,
 } = require("../controller/customerControler");
 const { checkLoginCustomer } = require("../midleware/midleware");
 const customerProductPageRoute = express.Router();
@@ -22,7 +23,8 @@ customerProductPageRoute.get(
 //History order
 customerProductPageRoute.get("/order-history", handlehistoryOrderController);
 //User information page
-customerProductPageRoute.get("/user-information", (req, res) => {
-  res.send("hello user information page");
-});
+customerProductPageRoute.get(
+  "/user-information/:id",
+  handleCustomerInformation
+);
 module.exports = customerProductPageRoute;

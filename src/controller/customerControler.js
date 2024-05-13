@@ -216,6 +216,18 @@ const handlehistoryOrderController = async (req, res) => {
     res.status(400).json({ EC: 0, message: JSON.stringify(error) });
   }
 };
+const handleCustomerInformation = async (req, res) => {
+  try {
+    const token = req.cookies.jwt;
+    const user = await findUserByJwt(token);
+    res.render("customerInforPage.ejs", { user });
+  } catch (error) {
+    res.status(400).json({
+      EC: 1,
+      message: JSON.stringify(error),
+    });
+  }
+};
 module.exports = {
   createCustomerController,
   getAllCustomerController,
@@ -230,4 +242,5 @@ module.exports = {
   deleteItemController,
   handleCustomerOrder,
   handlehistoryOrderController,
+  handleCustomerInformation,
 };
