@@ -25,13 +25,15 @@ customerRouter.post("/create-customer", createCustomerController);
 //Get All customer
 customerRouter.get("/get-all-customer", getAllCustomerController);
 //Update customer
-customerRouter.put("/update-customer", updateCustomerController);
+customerRouter.post("/update-customer", updateCustomerController);
 //Delete a customer
 customerRouter.delete("/delete-customer", deleteCustomerController);
 // Login customer
 customerRouter.post("/login", loginCustomerController);
 //Logout customer
 customerRouter.post("/logout", logoutCustomerController);
+//Sign up customer
+customerRouter.post("/sign-up", createCustomerController);
 //Add cart
 customerRouter.put("/add-cart", addCartCustomerController);
 //Add cart

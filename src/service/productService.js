@@ -1,7 +1,10 @@
 const Product = require("../model/productModel");
+const multer = require("multer");
+const path = require("path");
+const csv = require("csvtojson");
+
 const aqp = require("api-query-params");
 const createProductService = async (reqBody) => {
-  //
   const resultProduct = await Product.create(reqBody);
   return resultProduct;
 };
@@ -33,6 +36,7 @@ const updateProductService = async (reqBody) => {
       { _id: idProduct },
       updateObject
     );
+    result.save();
     return result;
   } catch (error) {
     console.log("error from update product servicesss", error);
@@ -73,6 +77,68 @@ const findListProductByIdService = async (arrayIdProduct) => {
     console.log("error from findListProductByIdService", error);
   }
 };
+// insert many product by file
+
+const insertManyProductService = async (req, res) => {
+  let arrayData = [];
+  //create file upload path
+  const filePath = path.join(__dirname, "..", "uploadFile");
+  //create storage
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, filePath);
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    },
+  });
+  //create upload file
+  const uploadSingleFile = multer({ storage: storage }).single("csvFile");
+  uploadSingleFile(req, res, async (error) => {
+    if (error) {
+      return res.status(500).json({
+        EC: 1,
+        message: "upload file unsucess",
+        error: JSON.stringify(error),
+      });
+    } else {
+      const fileCsvPath = path.join(filePath, req.file.originalname);
+      //convert data csv to json
+      const dataConvert = await csv().fromFile(fileCsvPath);
+      const insertData = await Product.insertMany(dataConvert);
+      res.status(200).json({
+        EC: 0,
+        message: "upload sucess",
+        data: insertData,
+      });
+    }
+  });
+};
+const handleUpdateStock = async (idProduct) => {
+  try {
+    //Multiple Product
+    if (Array.isArray(idProduct)) {
+      for (let i = 0; i < idProduct.length; i++) {
+        const product = await Product.findById(idProduct[i]);
+        const currentStock = Number(product.quantityInstock) - 1;
+        const updateStock = currentStock.toString();
+        await Product.findByIdAndUpdate(idProduct[i], {
+          quantityInstock: updateStock,
+        });
+      }
+      //Single Product
+    } else {
+      const product = await Product.findById(idProduct);
+      const currentStock = Number(product.quantityInstock) - 1;
+      const updateStock = currentStock.toString();
+      await Product.findByIdAndUpdate(idProduct, {
+        quantityInstock: updateStock,
+      });
+    }
+  } catch (error) {
+    console.log("Error handleUpdateStock service", error);
+  }
+};
 module.exports = {
   createProductService,
   getAllProductService,
@@ -80,4 +146,6 @@ module.exports = {
   deleteProductService,
   findProductService,
   findListProductByIdService,
+  insertManyProductService,
+  handleUpdateStock,
 };

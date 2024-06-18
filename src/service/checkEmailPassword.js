@@ -17,7 +17,6 @@ const checkEmailPasswordService = async (email, password, user) => {
     // check password
     const hashPassword = data[0].password;
     const checkPassWord = bcrypt.compareSync(password, hashPassword);
-    console.log("check password >>>>>>>>>", checkPassWord);
     if (!checkPassWord)
       return {
         error: 1,

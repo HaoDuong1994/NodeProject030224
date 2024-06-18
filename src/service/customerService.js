@@ -52,7 +52,7 @@ const deleteCustomerService = async (id) => {
 const loginCustomerService = async (email, password, res) => {
   try {
     //Check email
-    const user = await Customer.findOne({ email });
+    const user = await Customer.findOne({ email }).select("+password").exec();
     if (!user)
       return {
         error: 1,

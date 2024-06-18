@@ -6,13 +6,18 @@ const {
   getAllProductController,
   updateProductController,
   deleteProductController,
+  createManyProductController,
 } = require("../controller/productController");
+
 //Create product
 productRouter.post("/create-product", createProductController);
+
 //Get all product
 productRouter.get("/", verifyToken, getAllProductController);
 // Update product
 productRouter.post("/update-product", checkTokenAdmin, updateProductController);
 // Delete product
 productRouter.delete("/delete-product", deleteProductController);
+//Upload many product
+productRouter.post("/create-many-product", createManyProductController);
 module.exports = productRouter;

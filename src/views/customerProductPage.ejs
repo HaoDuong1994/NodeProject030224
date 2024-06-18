@@ -10,12 +10,17 @@
     <title>Products</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg p-3 bg-black text-white">
       <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a
+                class="nav-link active text-light"
+                aria-current="page"
+                href="/customer/product"
+                >Home</a
+              >
             </li>
             <li class="nav-item dropdown">
               <button
@@ -25,40 +30,38 @@
               </button>
               <ul class="dropdown-menu dropdown-menu-dark">
                 <li>
-                  <a
-                    class="dropdown-item"
-                    href="/customerProductsPage?type=pants"
+                  <a class="dropdown-item" href="/customer/product?type=pants"
                     >pants</a
                   >
                 </li>
                 <li>
-                  <a
-                    class="dropdown-item"
-                    href="/customerProductsPage?type=shirt"
+                  <a class="dropdown-item" href="/customer/product?type=shirt"
                     >shirt</a
                   >
                 </li>
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="customerProductsPage/cart">Your card</a>
+              <a class="nav-link text-light" href="/customer/cart">Your card</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="customerProductsPage/order-history"
+              <a class="nav-link text-light" href="/customer/order-history"
                 >Order history</a
               >
             </li>
             <li class="nav-item d-flex justify-content-center">
               <div class="">
-                <form action="customer/logout" method="POST">
-                  <button class="btn btn-outline-primary">Log out</button>
+                <form action="/customer/logout" method="POST">
+                  <button class="btn btn-outline-primary text-light">
+                    Log out
+                  </button>
                 </form>
               </div>
             </li>
           </ul>
           <form
             method="GET"
-            action="/customerProductsPage?=name"
+            action="/customer/product?=name"
             class="d-flex nav-item mx-5"
             role="search">
             <input
@@ -67,47 +70,34 @@
               class="form-control me-2"
               placeholder="Search by product name"
               aria-label="Search" />
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
+            <button class="btn btn-primary" type="submit">Search</button>
           </form>
           <div class="nav-item">
             <a
-              href="customerProductsPage/user-information/<%= user._id %>"
+              href="/customer/user-information/<%= user._id %>"
               class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
               ><%= user.name %></a
             >
-            <img style="height: 50px; width: 50px" src="<%= user.img %>" />
+            <img
+              style="height: 50px; width: 50px"
+              src="<%= user.img %>"
+              class="rounded-circle" />
           </div>
         </div>
       </div>
     </nav>
+    <div class="mt-0">
+      <img
+        src="https://theme.hstatic.net/1000333436/1001213866/14/slideshow_2_master.jpg?v=310" />
+    </div>
+    <hr class="border border-primary border-3 opacity-75" />
+    <div class="d-flex justify-content-center text-danger fs-2 my-5">
+      Product list
+    </div>
     <div>
       <div class="container overflow-hidden text-center">
         <!-- Hàng thứ nhứt -->
         <div class="row gy-5">
-          <div class="col-3">
-            <!-- Card thứ nhứt -->
-            <div class="card" style="width: 18rem">
-              <img
-                src="https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/ba000c9d-2a17-4fef-9f8c-73db601ce533/sportswear-t-shirt-GtmXnf.png"
-                class="card-img-top img-thumbnail"
-                style="width: 300px; height: 400px" />
-              <div class="card-body">
-                <h5 class="card-title">Áo thun trắng</h5>
-                <p class="card-text">Áo thun trắng vải cotton 4 chiều</p>
-                <div>
-                  <span>Type: </span>
-                  <span>Quần</span>
-                </div>
-                <div>
-                  <span>Price: </span>
-                  <span class="text-danger fs-5">30000</span>
-                </div>
-                <a href="#" class="btn btn-primary">Add to card</a>
-              </div>
-            </div>
-          </div>
           <% for (let i = 0; i < listProduct.length; i++) { %>
           <div class="col-3">
             <!-- Card thứ nhứt -->
@@ -122,6 +112,12 @@
                 <div>
                   <span>Type: </span>
                   <span><%= listProduct[i]. type %></span>
+                </div>
+                <div>
+                  <span>Instock: </span>
+                  <span class="badge text-bg-primary rounded-pill"
+                    ><%= listProduct[i]. quantityInstock %></span
+                  >
                 </div>
                 <div>
                   <span>Price: </span>

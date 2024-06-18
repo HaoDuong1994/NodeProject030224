@@ -57,6 +57,7 @@ const addProductToOrderService = async (idOrder, idProduct) => {
     return order;
   } else {
     order.products.push(idProduct);
+    await order.save();
     return order;
   }
 };

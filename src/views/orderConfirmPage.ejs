@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="p-5">
+      <div class="text-danger fs-5 mb-5">Order confirm</div>
+      <div>
+        <table class="table table-bordered border-1">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Number</th>
+              <th scope="col">Order code</th>
+              <th scope="col">User</th>
+              <th scope="col">Day</th>
+              <th scope="col">Status</th>
+              <th scope="col">Price</th>
+              <th scope="col">Detail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let i=0; i < order.length; i++) { %>
+            <tr>
+              <td><%= i+1 %></td>
+              <td><%= "#" + order[i]._id.toString().slice(-7) %></td>
+              <td><%= order[i].receiverName %></td>
+              <td><%= moment(order[i].createdAt).format('LL') %></td>
+              <td class="text-danger"><%= order[i].status %></td>
+              <td><%= order[i].totalPrice %></td>
+              <td>
+                <a href="/adminProductsPage/confirm-order/<%= order[i]._id %>"
+                  >View order</a
+                >
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

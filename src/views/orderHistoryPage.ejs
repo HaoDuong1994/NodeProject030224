@@ -8,76 +8,104 @@
       rel="stylesheet"
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
     <title>Order history</title>
   </head>
   <body>
-    <div>Your ordered list</div>
-    <div class="d-flex flex-column justify-content-between w-75 mt-3">
-      <div class="accordion" id="accordionExample">
-        <% for (let i = 0; i < dataOrder.length; i++) { %>
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button
-              class="accordion-button"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseOne"
-              aria-expanded="true"
-              aria-controls="collapseOne">
-              <div class="d-flex w-50">
-                <div>STT:</div>
-                <div class="mx-2"><%= i+1 %></div>
-                <div class="mx-2">Day:</div>
-                <div class="mx-2">
-                  <%= moment(dataOrder[i].createdAt).format("LLLL") %>
+    <nav class="navbar bg-secondary-subtle">
+      <div class="d-flex ms-3">
+        <a class="navbar-brand text-danger" href="/customer/product">RY Shop</a>
+        <i
+          class="fa-solid fa-bag-shopping d-flex justify-content-center align-items-center"></i>
+      </div>
+    </nav>
+    <div class="d-flex justify-content-center text-danger fs-1">
+      Your ordered list
+    </div>
+    <div class="d-flex justify-content-center">
+      <div class="d-flex flex-column justify-content-between w-75 mt-3">
+        <div class="accordion" id="accordionExample">
+          <% for (let i = 0; i < dataOrder.length; i++) { %>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne">
+                <div class="d-flex w-50">
+                  <div>STT:</div>
+                  <div class="mx-2"><%= i+1 %></div>
+                  <div class="mx-2">Day:</div>
+                  <div class="mx-2">
+                    <%= moment(dataOrder[i].createdAt).format("LLLL") %>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <span>Total Price: </span>
-                <span class="text-danger"><%= dataOrder[i].totalPrice %></span>
-              </div>
-            </button>
-          </h2>
-          <div
-            id="collapseOne"
-            class="accordion-collapse collapse show"
-            data-bs-parent="#accordionExample">
-            <div class="accordion-body d-flex">
-              <div>
-                <img
-                  class="h-50"
-                  style="width: 60px"
-                  src="<%= dataOrder[i].products[0].img %>" />
-              </div>
-              <div class="mx-5">
+
                 <div>
-                  <span class="text-danger">Reveiver: </span>
-                  <span class="mx-2"><%= dataOrder[i].receiverName %></span>
+                  <span>Total Price: </span>
+                  <span class="text-danger"
+                    ><%= dataOrder[i].totalPrice %></span
+                  >
                 </div>
-                <div>
-                  <span class="text-danger">Paymond method: </span>
-                  <span class="mx-2"><%= dataOrder[i].paymentMethod %></span>
+                <div class="ms-5 d-flex justify-content-between">
+                  <div>Status:</div>
+                  <div class="ms-2 text-bg-primary">
+                    <%= dataOrder[i].status %>
+                  </div>
                 </div>
+              </button>
+            </h2>
+            <div
+              id="collapseOne"
+              class="accordion-collapse collapse show"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body d-flex">
                 <div>
-                  <span class="text-danger">Address recieve: </span>
-                  <span class="mx-2"><%= dataOrder[i].deliveryAddress %></span>
+                  <img
+                    class="h-50"
+                    style="width: 60px"
+                    src="<%= dataOrder[i].products[0].img %>" />
                 </div>
-                <div>
-                  <span class="text-danger">Product ordered: </span>
-                  <% for (let j = 0; j < dataOrder[i].products.length; j++) { %>
-                  <span class="mx-1 text-primary"
-                    ><%= dataOrder[i].products[j].name %>,
-                  </span>
-                  <% } %>
+                <div class="mx-5">
+                  <div>
+                    <span class="text-danger">Reveiver: </span>
+                    <span class="mx-2"><%= dataOrder[i].receiverName %></span>
+                  </div>
+                  <div>
+                    <span class="text-danger">Paymond method: </span>
+                    <span class="mx-2"><%= dataOrder[i].paymentMethod %></span>
+                  </div>
+                  <div>
+                    <span class="text-danger">Address recieve: </span>
+                    <span class="mx-2"
+                      ><%= dataOrder[i].deliveryAddress %></span
+                    >
+                  </div>
+                  <div>
+                    <span class="text-danger">Product ordered: </span>
+                    <% for (let j = 0; j < dataOrder[i].products.length; j++) {
+                    %>
+                    <span class="mx-1 text-primary"
+                      ><%= dataOrder[i].products[j].name %>,
+                    </span>
+                    <% } %>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <% } %>
         </div>
-        <% } %>
       </div>
     </div>
-
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

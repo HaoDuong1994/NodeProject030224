@@ -18,7 +18,6 @@ const verifyToken = (req, res, next) => {
 };
 
 const checkTokenAdmin = (req, res, next) => {
-  console.log("tokeennnnnn", req.cookies);
   const token = req.cookies.jwt;
   if (token) {
     //
@@ -26,11 +25,9 @@ const checkTokenAdmin = (req, res, next) => {
       if (err) res.redirect("/adminLoginPage");
       const idUser = decoded.id;
       const admin = await Admin.findById(idUser);
-      console.log("admin here", admin);
       if (admin) {
         next();
       } else {
-        console.log("you are not allowed to do this");
         res.redirect("/adminLoginPage");
       }
     });
@@ -43,13 +40,13 @@ const checkLoginCustomer = (req, res, next) => {
   if (token) {
     jwt.verify(token, "DUONGVIHAO", (err, decoded) => {
       if (err) {
-        res.redirect("/userLoginPage");
+        res.redirect("/customer/log-in");
       } else {
         next();
       }
     });
   } else {
-    res.redirect("/userLoginPage");
+    res.redirect("/customer/log-in");
   }
 };
 module.exports = {

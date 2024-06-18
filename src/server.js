@@ -16,7 +16,7 @@ const orderRoute = require("./route/orderRoute");
 const editProductRoute = require("./route/editProductRoute");
 const productPageRoute = require("./route/productPageRoute");
 const customerProductPageRoute = require("./route/userProductPageRoute");
-const fileUpload = require("express-fileupload");
+
 //config body-parser
 configBodyParser(app);
 //config cookie - parser
@@ -26,8 +26,6 @@ configViewEngine(app, __dirname);
 //config env
 require("dotenv").config();
 let port = process.env.PORT;
-//config upload file
-app.use(fileUpload());
 //config connection to data base;
 (async () => {
   //<<<<<<<<<<<<<<self running function
@@ -40,7 +38,8 @@ app.use(fileUpload());
     console.log("error with connection >>>>>>>>", error);
   }
 })();
-//////////////////////////API///////////////////////////
+
+///////////////////   API    /////////////////////
 //Customer Route
 app.use("/customer", customerRouter);
 //Admin Route
@@ -49,14 +48,15 @@ app.use("/admin", adminRouter);
 app.use("/product", productRouter);
 //Order Route
 app.use("/order", orderRoute);
-////////////////////Front End ///////////////////////////
+
+///////////////////   UI    ////////////////////
 // User Login page
 app.use("/userLoginPage", loginPageRoute);
 //Customer product page
-app.use("/customerProductsPage", customerProductPageRoute);
+app.use("/customer", customerProductPageRoute);
 // Admin login page
 app.use("/adminLoginPage", adminLoginPageRoute);
 //edit Product Page
 app.use("/editProductPage", editProductRoute);
-//Admin Product page
-app.use("/adminProductsPage", productPageRoute);
+//Admin Page
+app.use("/admin", productPageRoute);

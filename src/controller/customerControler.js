@@ -22,26 +22,20 @@ const { singleUploadFile } = require("../service/uploadFileCustomerService");
 const hassPassword = require("../service/hashPasswordService");
 const createCustomerController = async (req, res) => {
   try {
-    //check file exist
-    // if (!req.files.img || Object.keys(req.files).length === 0) {
-    //   return res.status(400).send("No files were uploaded.");
-    // }
-    // let imgUrl = "";
-    // //Upload file
-    // const dataFile = await singleUploadFile(req.files.img);
-    // imgUrl = dataFile.path;
+    console.log("reqbodyyyyyyyy", req.url);
     let password = req.body.password;
-    //Hash passwork
     const hashPassword = await hassPassword(password);
-    // req.body.img = imgUrl;
-
     req.body.password = hashPassword;
     // Create customer
     let result = await createCustomerService(req.body, res);
-    res.status(200).json({
-      EC: 0,
-      data: result,
-    });
+    if (req.url === "/sign-up") {
+      res.redirect("/customer/product");
+    } else {
+      res.status(200).json({
+        EC: 0,
+        data: result,
+      });
+    }
   } catch (error) {
     res.status(200).json({
       EC: 1,
@@ -91,13 +85,12 @@ const deleteCustomerController = async (req, res) => {
 const loginCustomerController = async (req, res) => {
   const { email, password } = req.body;
   try {
-    console.log(email, password);
     const result = await loginCustomerService(email, password, res);
     if (result.message === "Login Sucess")
-      return res.redirect("/customerProductsPage");
+      return res.redirect("/customer/product");
     res.render("responseLoginPage.ejs", { status: result.message });
   } catch (error) {
-    res.statuss(400).json({
+    res.status(400).json({
       EC: 1,
       message: JSON.stringify(error),
     });
@@ -107,7 +100,7 @@ const loginCustomerController = async (req, res) => {
 const logoutCustomerController = async (req, res) => {
   //
   res.clearCookie("jwt");
-  res.redirect("/userLoginPage");
+  res.redirect("/customer/log-in");
 };
 //add cart
 const addCartCustomerController = async (req, res) => {
@@ -141,7 +134,7 @@ const getAllProductPageController = async (req, res) => {
 const addCartController = async (req, res) => {
   const idProduct = req.params.idProduct;
   await addToCartService(idProduct, req);
-  res.send("Add to cart sucess");
+  res.redirect("/customer/cart");
 };
 const handleCartCustomerController = async (req, res) => {
   try {
@@ -165,7 +158,7 @@ const deleteItemController = async (req, res) => {
   try {
     const idProduct = req.params.idProduct;
     await handleDeleteItemService(req, idProduct);
-    res.redirect("/customerProductsPage/cart");
+    res.redirect("/customer/cart");
   } catch (error) {
     res.status(400).json({
       EC: 1,
@@ -176,16 +169,17 @@ const deleteItemController = async (req, res) => {
 const handleCustomerOrder = async (req, res) => {
   try {
     const { idProduct, totalPrice } = req.params;
+    const user = await findUserByJwt(req.cookies.jwt);
+    console.log("user >>>", user);
     if (idProduct === "allProduct") {
-      console.log("ok >>>>>>");
       const listProduct = await handleOrderAllCartCustomerService(req);
-      console.log("list product", listProduct);
       res.render("customerOrderPage.ejs", {
         product: listProduct,
         totalPrice: totalPrice,
+        user: user,
       });
     } else {
-      /////Single product
+      ///Single product
       const product = await findProductService(idProduct);
       const arrayProduct = [];
       arrayProduct.push(product);
@@ -193,6 +187,7 @@ const handleCustomerOrder = async (req, res) => {
       res.render("customerOrderPage.ejs", {
         product: arrayProduct,
         totalPrice: totalPrice,
+        user: user,
       });
     }
   } catch (error) {

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const Customer = require("../model/customerModel");
+const Admin = require("../model/adminModel");
 require("dotenv").config();
 const createToken = (id) => {
   const expireDay = 3 * 24 * 60 * 60;
@@ -18,4 +19,10 @@ const findUserByJwt = async (token) => {
   const user = await Customer.findById(idUser);
   return user;
 };
-module.exports = { createToken, getIdByJwt, findUserByJwt };
+const findAdminByJwt = async (token) => {
+  const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
+  const idUser = decoded.id;
+  const user = await Admin.findById(idUser);
+  return user;
+};
+module.exports = { createToken, getIdByJwt, findUserByJwt, findAdminByJwt };

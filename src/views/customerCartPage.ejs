@@ -12,6 +12,12 @@
         rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
         crossorigin="anonymous" />
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
     </head>
     <style>
       #id-product {
@@ -35,7 +41,14 @@
     <title>Your cart</title>
   </head>
   <body>
-    <table class="table">
+    <nav class="navbar bg-secondary-subtle">
+      <div class="d-flex ms-3">
+        <a class="navbar-brand text-danger" href="/customer/product">RY Shop</a>
+        <i
+          class="fa-solid fa-bag-shopping d-flex justify-content-center align-items-center"></i>
+      </div>
+    </nav>
+    <table class="table p-4">
       <thead>
         <tr>
           <th scope="col">Number</th>
@@ -56,9 +69,7 @@
           <td><%= listProduct[i].price %></td>
           <td>
             <button>
-              <a href="/customerProductsPage/order/<%= listProduct[i]._id %>/0"
-                >Order</a
-              >
+              <a href="/customer/order/<%= listProduct[i]._id %>/0">Order</a>
             </button>
           </td>
           <td>
@@ -72,9 +83,7 @@
         <% } %>
       </tbody>
     </table>
-    <form
-      action="/customerProductsPage/order/allProduct/<%= totalPrice %>"
-      method="GET">
+    <form action="/customer/order/allProduct/<%= totalPrice %>" method="GET">
       <div id="total-price">
         <div>Total price</div>
         <span class="total-price"><%= totalPrice %></span>
@@ -84,5 +93,8 @@
         <button class="btn btn-danger col-6 mx-auto">Order All</button>
       </div>
     </form>
+    <script
+      src="https://kit.fontawesome.com/0ecb672340.js"
+      crossorigin="anonymous"></script>
   </body>
 </html>

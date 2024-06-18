@@ -3,15 +3,16 @@ const {
   getAllAdminService,
   updateAdminService,
   deleteAdminService,
+  handleAdminOrderAnalystService,
+  handleStatisticSpecificDay,
 } = require("../service/adminService");
+const Order = require("../model/orderModel");
+const { getOrderService } = require("../service/orderService");
+const moment = require("moment");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { comparePassword } = require("../service/comparePasswordService");
 const { checkEmailExist } = require("../service/check service/checkEmail");
-const {
-  uploadSingleFile,
-  uploadMultipleFile,
-} = require("../service/uploadFileService");
 const hassPassword = require("../service/hashPasswordService");
 const checkEmailPasswordService = require("../service/checkEmailPassword");
 const createAdminController = async (req, res) => {
@@ -40,7 +41,6 @@ const createAdminController = async (req, res) => {
         result.forEach((element) => {
           arrayImgUrl.push(element.path);
         });
-        console.log(arrayImgUrl);
         const data = await createAdminService(req.body, arrayImgUrl);
         res.status(200).json({
           EC: 0,
@@ -174,7 +174,6 @@ const adminLoginController = async (req, res) => {
         //move to check password
         const { hashPassword } = userStatus;
         const passwordChecking = await comparePassword(password, hashPassword);
-        console.log("password check ing", passwordChecking);
         if (passwordChecking) {
           // create token
           const privatekey = process.env.PRIVATE_KEY;
@@ -190,7 +189,7 @@ const adminLoginController = async (req, res) => {
           res.cookie("jwt", token, {
             httpOnly: true,
           });
-          res.redirect("/adminProductsPage");
+          res.redirect("/admin/home");
         } else {
           res.send("invalid password");
         }
@@ -206,6 +205,56 @@ const adminLoginController = async (req, res) => {
     });
   }
 };
+
+const adminLogoutController = async (req, res) => {
+  res.clearCookie("jwt");
+  res.redirect("/admin/log-in");
+};
+const handleAdminAnalistController = async (req, res) => {
+  try {
+    const data = await handleAdminOrderAnalystService(req, res);
+    res.render("orderAnalistPage.ejs", { data: data, moment: moment });
+  } catch (error) {
+    res.status(500).json({
+      EC: 1,
+      message: JSON.stringify(error),
+    });
+  }
+};
+const handleStatisticSpecificday = async (req, res) => {
+  try {
+    const data = await handleStatisticSpecificDay(req, res);
+    res.render("orderAnalistPage.ejs", { data: data, moment: moment });
+  } catch (error) {
+    res.status(500).json({
+      EC: 1,
+      message: JSON.stringify(error),
+    });
+  }
+};
+const orderConfirmController = async (req, res) => {
+  try {
+    const orderConfirm = await getOrderService(req.query);
+    res.render("orderConfirmPage.ejs", { order: orderConfirm, moment: moment });
+  } catch (error) {
+    res.status(400).json({ EC: 1, message: JSON.stringify(error) });
+  }
+};
+
+const handleOrderController = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate({ path: "products" })
+      .lean()
+      .exec();
+    res.render("orderDetailConfirm.ejs", { order: order, moment: moment });
+  } catch (error) {
+    res.status(400).json({
+      EC: 0,
+      message: JSON.stringify(error),
+    });
+  }
+};
 module.exports = {
   createAdminController,
   getAdminController,
@@ -214,4 +263,9 @@ module.exports = {
   deleteAdminController,
   loginAdminController,
   adminLoginController,
+  adminLogoutController,
+  handleAdminAnalistController,
+  handleStatisticSpecificday,
+  orderConfirmController,
+  handleOrderController,
 };

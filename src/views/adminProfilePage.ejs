@@ -17,7 +17,7 @@
         <hr clas="border border-primary border-2 opacity-25" />
         <div class="h-100 d-flex" style="width: 100%">
           <div style="width: 50%">
-            <form method="POST" action="/customer/update-customer">
+            <form method="POST" action="/admin/update-admin">
               <div id="container">
                 <div class="mb-3">
                   <input name="id" type="hidden" value="<%= user._id %>" />
@@ -73,7 +73,7 @@
               </h5>
               <div class="d-flex justify-content-center" style="width: 18rem">
                 <img
-                  src="<%= user.img %>"
+                  src="<%= user.image %>"
                   class="rounded-circle"
                   style="height: 200px; width: 200px" />
               </div>
@@ -89,12 +89,6 @@
                 <div class="card-text">
                   <span>Phone: </span>
                   <span class="font-monospace"><%= user.phone %></span>
-                </div>
-                <div class="card-text">
-                  <span>Ordered: </span>
-                  <span class="font-monospace text-danger"
-                    ><%= user.orderInfor.length %></span
-                  >
                 </div>
               </div>
             </div>

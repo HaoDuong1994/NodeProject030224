@@ -12,35 +12,91 @@
         width: 5px;
         height: 5px;
       }
+      .special-day {
+        font-weight: bold;
+        color: red;
+      }
     </style>
-    <title>Product</title>
+    <title>Admin Product Page</title>
   </head>
   <body>
-    <ul class="nav">
+    <ul class="nav bg-black d-flex justify-content-center">
+      <li
+        class="nav-item d-flex justify-content-center align-items-center"
+        style="margin-right: 150px">
+        <div class="text-white me-2 fs-5">Admin</div>
+        <div><i class="fa-solid fa-person text-white fs-5"></i></div>
+      </li>
       <li class="nav-item">
         <a
           class="nav-link active"
           aria-current="page"
-          href="/adminProductsPage/create-product"
+          href="/admin/create-product"
           >Create product</a
         >
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+      <li>
+        <ul class="nav d-flex justify-content-between">
+          <li class="nav-item ms-2">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              href="/admin/create-many-product"
+              >Upload Product by file</a
+            >
+          </li>
+          <li class="nav-item ms-2">
+            <a class="nav-link active" aria-current="page" href="/admin/account"
+              >Personal Detail</a
+            >
+          </li>
+          <li class="nav-item ms-2">
+            <a
+              class="nav-link active text-danger"
+              aria-current="page"
+              href="/admin/confirm-order/?orderConfirm=false"
+              >Order confirmation</a
+            >
+          </li>
+          <li class="nav-item ms-2">
+            <div class="dropdown">
+              <a
+                class="btn btn-outline-primary dropdown-toggle"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Data Analist
+              </a>
+
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="/admin/order-statistics"
+                    >Analist Order</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item d-flex flex-column justify-content-center ms-4">
+            <form action="/admin/admin-logout" method="POST">
+              <button class="btn btn-outline-primary">Log out</button>
+            </form>
+          </li>
+        </ul>
       </li>
     </ul>
+    <div>
+      <img
+        src="https://m.media-amazon.com/images/S/al-na-9d5791cf-3faf/44fa32dd-9ca6-4529-b51a-6f594669e8dd._CR0%2C0%2C3001%2C601_SX1500_.jpg"
+        style="width: 1520px; height: 400px" />
+    </div>
     <table class="table">
       <tr>
         <th>ID</th>
         <th>Name</th>
         <th>Imgage</th>
         <th>Price</th>
+        <th>Quantity</th>
         <th>Description</th>
         <th>Type</th>
       </tr>
@@ -48,17 +104,25 @@
       <tr>
         <td><%= i + 1 %></td>
         <td><%= listProduct[i].name %></td>
-        <td><%= listProduct[i].img %></td>
+        <td>
+          <img
+            style="width: 30px; height: 30px"
+            src="<%= listProduct[i].img %>" />
+        </td>
         <td><%= listProduct[i].price %></td>
+        <td class="text-danger"><%= listProduct[i].quantityInstock %></td>
         <td><%= listProduct[i].description %></td>
         <td><%= listProduct[i].type %></td>
         <td>
           <a href="/editProductPage/<%= listProduct[i]._id %>">
-            <button>Edit</button>
+            <button class="btn btn-secondary">Edit</button>
           </a>
         </td>
       </tr>
       <% } %>
     </table>
+    <script
+      src="https://kit.fontawesome.com/0ecb672340.js"
+      crossorigin="anonymous"></script>
   </body>
 </html>

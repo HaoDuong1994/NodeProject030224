@@ -9,6 +9,7 @@ const {
   deleteAdminController,
   loginAdminController,
   adminLoginController,
+  adminLogoutController,
 } = require("../controller/adminController");
 //Create admin
 adminRouter.post("/create-admin", createAdminController);
@@ -18,10 +19,13 @@ adminRouter.post("/login", loginAdminController);
 adminRouter.get("/", getAdminController);
 //Update admin
 adminRouter.put("/update-admin", updateAdminController);
+adminRouter.post("/update-admin", updateAdminController);
 //Uploaf file
 adminRouter.post("/file", uploadFileController);
 //Delete admin
 adminRouter.delete("/delete-admin", deleteAdminController);
 //Admin login page
 adminRouter.post("/admin-login", adminLoginController);
+//Admin logout
+adminRouter.post("/admin-logout", adminLogoutController);
 module.exports = adminRouter;

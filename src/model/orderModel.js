@@ -21,6 +21,14 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      default: "pending",
+    },
+    orderConfirm: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true, // createdAt, updatedAt
