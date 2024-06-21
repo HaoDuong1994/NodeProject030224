@@ -56,4 +56,8 @@ productPageRoute.get("/confirm-order/:id", handleOrderController);
 productPageRoute.get("/log-in", (req, res) => {
   res.render("adminLoginPage");
 });
+//Admin sign up
+productPageRoute.get("/sign-up", (req, res) => {
+  res.render("adminSignUp.ejs");
+});
 module.exports = productPageRoute;

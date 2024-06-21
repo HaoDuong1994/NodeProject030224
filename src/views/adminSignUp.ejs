@@ -14,34 +14,32 @@
         height: 100vh;
       }
     </style>
-    <title>Member ship sign up</title>
+    <title>Admin ship sign up</title>
   </head>
   <body class="d-flex flex-column justify-content-center align-items-center">
     <div
       id="form-container"
       style="width: 600px; height: 600px"
       class="bg-light align-items-center p-4">
-      <h4>RY Membership</h4>
+      <h4>To be RY shop admin</h4>
       <p>Please fill in this form to create an account</p>
       <form
-        enctype="multipart/form-data"
-        action="/customer/sign-up"
+        action="/admin/create-admin"
         method="POST"
-        id="form">
+        id="form"
+        enctype="multipart/form-data">
         <div class="d-flex">
           <input
-            value="Ex: Raymond"
             name="name"
             type="text"
             class="form-control"
-            placeholder="Username"
-            aria-label="Username" />
+            value="Ex: Raymond"
+            placeholder="Username" />
           <input
             name="email"
             type="text"
             class="form-control ms-2"
-            placeholder="Email"
-            aria-label="Email" />
+            placeholder="Email" />
         </div>
         <div>
           <input
@@ -59,13 +57,11 @@
             placeholder="Phone"
             aria-label="Username" />
         </div>
-        <div>
-          <input
-            name="avatar"
-            type="file"
-            class="form-control mt-3"
-            placeholder="Profile img by URL"
-            aria-label="Username" />
+        <div class="input-group mt-3">
+          <input name="avatar" type="file" class="form-control" />
+          <label class="input-group-text" for="inputGroupFile02"
+            >Img profile</label
+          >
         </div>
         <div>
           <input

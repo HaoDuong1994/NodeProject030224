@@ -2,7 +2,6 @@ const Customer = require("../model/customerModel");
 const bcrypt = require("bcryptjs");
 const aqp = require("api-query-params");
 const { findOrderById } = require("../service/orderCustomerService");
-const { comparePassword } = require("../service/comparePasswordService");
 const { createToken, getIdByJwt } = require("../service/jwtservice");
 const { findProductService } = require("../service/productService");
 const createCustomerService = async (reqBody, res) => {

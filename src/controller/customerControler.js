@@ -1,4 +1,5 @@
 const { findUserByJwt } = require("../service/jwtservice");
+
 const {
   createCustomerService,
   getAllCustomerService,
@@ -12,20 +13,27 @@ const {
   handleOrderAllCartCustomerService,
   handleOrderHistoryService,
 } = require("../service/customerService");
+
 const {
   getAllProductService,
   findProductService,
   findListProductByIdService,
 } = require("../service/productService");
+
 const moment = require("moment");
-const { singleUploadFile } = require("../service/uploadFileCustomerService");
+
 const hassPassword = require("../service/hashPasswordService");
+
 const createCustomerController = async (req, res) => {
   try {
-    console.log("reqbodyyyyyyyy", req.url);
+    if (!req.file) return res.send("Img profile needed");
+    console.log("req.file", req.file);
+    let imgUrl = req.file.originalname;
+    req.body.img = "/" + imgUrl;
     let password = req.body.password;
     const hashPassword = await hassPassword(password);
     req.body.password = hashPassword;
+
     // Create customer
     let result = await createCustomerService(req.body, res);
     if (req.url === "/sign-up") {
@@ -134,7 +142,7 @@ const getAllProductPageController = async (req, res) => {
 const addCartController = async (req, res) => {
   const idProduct = req.params.idProduct;
   await addToCartService(idProduct, req);
-  res.redirect("/customer/cart");
+  res.redirect("/customer/product");
 };
 const handleCartCustomerController = async (req, res) => {
   try {

@@ -17,17 +17,25 @@ const adminSchema = new mongoose.Schema(
       type: String,
       default: "Admin",
     },
-    address: String,
+    address: {
+      type: String,
+      required: [true, "Please enter address"],
+    },
     phone: String,
     password: {
       type: String,
       required: [true, "Please enter password"], // if false the second value will display to user
       select: true, // hide password on display
+      minLength: [4, "Minimum 4 character"],
     },
 
-    image: [String],
+    image: {
+      type: String,
+      required: [true, "Please enter your password"],
+    },
     gender: {
       type: String,
+      require: [true, "Please choose your gender"],
       enum: ["Male", "Female"],
     },
     roleId: String,

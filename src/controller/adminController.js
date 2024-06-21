@@ -6,6 +6,8 @@ const {
   handleAdminOrderAnalystService,
   handleStatisticSpecificDay,
 } = require("../service/adminService");
+const { createToken } = require("../service/jwtservice");
+const { handleAdmin400Error } = require("../service/handleError");
 const Order = require("../model/orderModel");
 const { getOrderService } = require("../service/orderService");
 const moment = require("moment");
@@ -13,53 +15,26 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { comparePassword } = require("../service/comparePasswordService");
 const { checkEmailExist } = require("../service/check service/checkEmail");
-const hassPassword = require("../service/hashPasswordService");
 const checkEmailPasswordService = require("../service/checkEmailPassword");
+
+//create Admin
+
 const createAdminController = async (req, res) => {
   try {
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).json({
-        EC: 1,
-        message: "You need upload Image profile",
-      });
-    } else {
-      // Check email exist from database
-      const isEmailExist = await checkEmailExist(req.body.email);
-      if (isEmailExist.message)
-        return res.status(400).json({
-          message: "Your email have been regristed already, please try again",
-        });
-      // //Hash password
-      let passWord = await hassPassword(req.body.password);
-      req.body.password = passWord;
-      //Resolve file upload
-      const fileImage = req.files.image;
-      const adminImgePath = "adminProfileImage";
-      if (Array.isArray(fileImage)) {
-        let arrayImgUrl = [];
-        const result = await uploadMultipleFile(fileImage, adminImgePath);
-        result.forEach((element) => {
-          arrayImgUrl.push(element.path);
-        });
-        const data = await createAdminService(req.body, arrayImgUrl);
-        res.status(200).json({
-          EC: 0,
-          dataUser: data,
-        });
-      } else {
-        let imgUrl = "";
-        let resultUploadFile = await uploadSingleFile(fileImage, adminImgePath);
-        imgUrl = resultUploadFile.path;
-        const resultCreateAdmin = await createAdminService(req.body, imgUrl);
-        res.status(200).json({
-          EC: 0,
-          dataUser: resultCreateAdmin,
-        });
-      }
-    }
+    if (!req.file) return res.send("Img profile needed");
+    let imgUrl = "/" + req.file.originalname;
+    req.body.image = imgUrl;
+    const result = await createAdminService(req.body);
+    const token = createToken(result._id);
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      maxAge: 3 * 24 * 60 * 60 * 1000,
+    });
+    res.redirect("/admin/home");
   } catch (error) {
+    const adminError = handleAdmin400Error(error);
     res.status(400).json({
-      Error: JSON.stringify(error),
+      adminError,
     });
   }
 };

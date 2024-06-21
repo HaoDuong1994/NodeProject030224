@@ -1,19 +1,14 @@
 const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
-//require function
+
 const configViewEngine = require("./config/viewengine");
 import configBodyParser from "./config/bodyparser";
 import connection from "./config/connectionDatabase";
 const customerRouter = require("./route/customerRouter");
-const {
-  loginPageRoute,
-  adminLoginPageRoute,
-} = require("./route/loginPageRoute");
 const adminRouter = require("./route/adminRouter");
 const productRouter = require("./route/productRouter");
 const orderRoute = require("./route/orderRoute");
-const editProductRoute = require("./route/editProductRoute");
 const productPageRoute = require("./route/productPageRoute");
 const customerProductPageRoute = require("./route/userProductPageRoute");
 
@@ -50,13 +45,9 @@ app.use("/product", productRouter);
 app.use("/order", orderRoute);
 
 ///////////////////   UI    ////////////////////
-// User Login page
-app.use("/userLoginPage", loginPageRoute);
+
 //Customer product page
 app.use("/customer", customerProductPageRoute);
-// Admin login page
-app.use("/adminLoginPage", adminLoginPageRoute);
-//edit Product Page
-app.use("/editProductPage", editProductRoute);
+
 //Admin Page
 app.use("/admin", productPageRoute);

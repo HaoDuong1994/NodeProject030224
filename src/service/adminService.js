@@ -1,9 +1,11 @@
 const Admin = require("../model/adminModel");
 const moment = require("moment");
 const Order = require("../model/orderModel");
-const createAdminService = async (reqBody, imgURL) => {
-  //
-  reqBody.image = imgURL;
+const hashPassword = require("./hashPasswordService");
+
+const createAdminService = async (reqBody) => {
+  const hash = await hashPassword(reqBody.password);
+  reqBody.password = hash;
   const result = await Admin.create(reqBody);
   return result;
 };
