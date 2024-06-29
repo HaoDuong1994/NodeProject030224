@@ -31,6 +31,7 @@
     <form
       class="border border-primary p-3 m-auto w-50 d-flex flex-column justify-content-evenly"
       action="/product/create-product"
+      enctype="multipart/form-data"
       method="POST">
       <div class="p-2 text-danger fs-2">Product creation</div>
       <div class="wrapper p-2">
@@ -55,12 +56,11 @@
         </div>
 
         <div class="mb-3">
-          <label for="basic-url" class="form-label">Image Product URL</label>
+          <label for="basic-url" class="form-label">Image Product</label>
           <div class="input-group">
-            <span class="input-group-text" id="basic-addon3">https://</span>
             <input
-              name="img"
-              type="text"
+              name="productImg"
+              type="file"
               class="form-control"
               id="basic-url"
               aria-describedby="basic-addon3 basic-addon4" />
